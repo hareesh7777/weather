@@ -1,6 +1,7 @@
 import {
   ActivityIndicator,
   FlatList,
+  Image,
   StyleSheet,
   Text,
   View,
@@ -43,6 +44,12 @@ const details = () => {
           >
             <Text style={styles.date}>{date}</Text>
             <Text style={styles.cityName}>{city}</Text>
+            <Image
+              source={{ uri: `https:${dayCurrent.condition.icon}` }}
+              width={50}
+              height={50}
+              style={{ alignSelf: "flex-end" }}
+            />
           </View>
           <RowItem leftText="Condition" rightText={dayCurrent.condition.text} />
           <RowItem
@@ -60,7 +67,14 @@ const details = () => {
         renderItem={({ item }) => {
           return (
             <View style={styles.forecastItem}>
-              <Text style={styles.date}>{item.time}</Text>
+              <View style={styles.risesetView}>
+                <Text style={styles.date}>{item.time}</Text>
+                <Image
+                  source={{ uri: `https:${item.condition.icon}` }}
+                  width={50}
+                  height={50}
+                />
+              </View>
               <RowItem leftText={"Humidity:"} rightText={item.humidity} />
               <RowItem
                 leftText={"Temperature: °C/°F"}
@@ -110,6 +124,7 @@ const styles = StyleSheet.create({
   risesetView: {
     justifyContent: "space-between",
     flexDirection: "row",
+    alignItems: 'center'
   },
   back: {},
   cityContainer: {
@@ -126,6 +141,7 @@ const styles = StyleSheet.create({
   cityName: {
     fontSize: 24,
     fontWeight: "bold",
+    width: '50%'
   },
   temperature: {
     fontSize: 20,

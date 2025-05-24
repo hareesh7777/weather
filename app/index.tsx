@@ -37,7 +37,7 @@ const HomeScreen = () => {
   const [searchCityList, setsearchCityList] = useState([]);
   const [searchdays, setsearchDays] = useState(3);
   useEffect(() => {
-    !data ? dispatch(fetchCurrentWeather({ days: 3 })): null;
+    !data ? dispatch(fetchCurrentWeather({ days: 3 })) : null;
   }, []);
 
   const handleSearchCity = async (cityName: string) => {
@@ -101,21 +101,29 @@ const HomeScreen = () => {
       {/* {error && <Text style={styles.error}>{error}</Text>} */}
       {data && (
         <View style={styles.cityContainer}>
-          {/* <ImageBackground src={require(`${data.current.condition.icon}`)} style={{width: '100%', height: '100%'}}> */}
-          <Text style={styles.cityName}>{city}</Text>
-          <View
-            style={{ flexDirection: "row", justifyContent: "space-between" }}
-          >
+          {/* <ImageBackground source={{uri: `https:${data.current.condition.icon}`}} resizeMode="contain"> */}
+          <View style={styles.rowView}>
+            <Text style={styles.cityName}>{city}</Text>
+            <Image
+              source={{ uri: `https:${data.current.condition.icon}` }}
+              height={50}
+              width={50}
+            />
+          </View>
+          <View style={styles.rowView}>
             <Text style={styles.condition}>{data.current.condition.text}</Text>
             <Text style={styles.temperature}>{data.current.temp_c}°C</Text>
           </View>
+
           {/* </ImageBackground> */}
         </View>
       )}
       {forecast && (
         <View>
           <Text style={styles.forecastTitle}>{searchdays}-Days Forecast</Text>
-          {loading && !forecast && <ActivityIndicator size="large" color="#0000ff" />}
+          {loading && !forecast && (
+            <ActivityIndicator size="large" color="#0000ff" />
+          )}
           <FlatList
             data={forecast}
             keyExtractor={(item) => item.date}
@@ -128,13 +136,16 @@ const HomeScreen = () => {
                     handleDayForecast(item.date);
                   }}
                 >
-                  <Text style={styles.date}>{item.date}</Text>
-                  <View
-                    style={{
-                      flexDirection: "row",
-                      justifyContent: "space-between",
-                    }}
-                  >
+                  <View style={styles.rowView}>
+                    <Text style={styles.date}>{item.date}</Text>
+                    <Image
+                      source={{ uri: `https:${item.day.condition.icon}` }}
+                      height={50}
+                      width={50}
+                    />
+                  </View>
+
+                  <View style={styles.rowView}>
                     <Text style={styles.condition}>
                       {item.day.condition.text}
                     </Text>
@@ -179,11 +190,15 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     paddingHorizontal: 8,
   },
+  rowView: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
   cityContainer: {
     backgroundColor: Theme.colors.skeletonbg,
     padding: 10,
     borderRadius: 10,
-    gap: 10,
+    gap: 5,
   },
   weatherContainer: {
     marginTop: 16,
@@ -206,10 +221,10 @@ const styles = StyleSheet.create({
   },
   forecastItem: {
     marginTop: 8,
-    backgroundColor: Theme.colors.starBorder,
+    backgroundColor: Theme.colors.white,
     padding: 10,
     borderRadius: 10,
-    gap: 10,
+    gap: 5,
   },
   date: {
     fontSize: 16,
